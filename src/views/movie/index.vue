@@ -1,5 +1,5 @@
 <template>
-  <div class="movie">
+  <div class="movie" id="main">
     <Header title="喵喵电影" />
     <div id="content">
       <div class="movie_menu">
@@ -7,11 +7,11 @@
           <span>大连</span>
           <i class="iconfont icon-lower-triangle"></i>
         </router-link>
-        <router-link tag="div" class="hot_swtich" to="/movie/city">
+        <router-link tag="div" class="hot_swtich" to="/movie/hot">
           <div class="hot_item">正在热映</div>
           <div class="hot_item">即将上映</div>
         </router-link>
-        <router-link tag="div" class="search_entry">
+        <router-link tag="div" class="search_entry" to="/movie/search">
           <i class="iconfont icon-sousuo"></i>
         </router-link>
       </div>
@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 export default {
-  name: "movie",
+  name: 'movie',
   components: {
     Header,
     Footer

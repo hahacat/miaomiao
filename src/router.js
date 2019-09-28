@@ -9,7 +9,14 @@ export default new Router({
     {
       path: '/movie',
       name: 'movie',
-      component: () => import('@/views/movie')
+      component: () => import('@/views/movie'),
+      children: [
+        {
+          path: '/movie/city',
+          name: 'city',
+          component: () => import('@/components/City')
+        }
+      ]
     },
     {
       path: '/cinema',
