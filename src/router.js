@@ -15,6 +15,16 @@ export default new Router({
           path: '/movie/city',
           name: 'city',
           component: () => import('@/components/City')
+        },
+        {
+          path: '/movie/nowplaying',
+          name: 'nowplaying',
+          component: () => import('@/components/Nowplaying')
+        },
+        {
+          path: '/movie/nowcoming',
+          name: 'nowcoming',
+          component: () => import('@/components/Nowcoming')
         }
       ]
     },

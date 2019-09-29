@@ -3,14 +3,14 @@
     <Header title="喵喵电影" />
     <div id="content">
       <div class="movie_menu">
-        <router-link tag="div" class="city_name active" to="/movie/city">
+        <router-link tag="div" class="city_name" to="/movie/city">
           <span>大连</span>
           <i class="iconfont icon-lower-triangle"></i>
         </router-link>
-        <router-link tag="div" class="hot_swtich" to="/movie/hot">
-          <div class="hot_item">正在热映</div>
-          <div class="hot_item">即将上映</div>
-        </router-link>
+        <div class="hot_swtich">
+          <router-link tag="div" to="/movie/nowplaying" class="hot_item">正在热映</router-link>
+          <router-link tag="div" to="/movie/nowcoming" class="hot_item">即将上映</router-link>
+        </div>
         <router-link tag="div" class="search_entry" to="/movie/search">
           <i class="iconfont icon-sousuo"></i>
         </router-link>
@@ -22,15 +22,15 @@
 </template>
 
 <script>
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 export default {
-  name: 'movie',
+  name: "movie",
   components: {
     Header,
     Footer
   }
-}
+};
 </script>
 
 <style scoped>
@@ -65,6 +65,11 @@ export default {
   display: flex;
   height: 100%;
   line-height: 45px;
+}
+
+.movie_menu .router-link-active {
+  color: #ef4238;
+  border-bottom: 2px #ef4238 solid;
 }
 .movie_menu .hot_item {
   font-size: 15px;
