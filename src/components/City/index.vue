@@ -7,7 +7,7 @@
           <li v-for="item in hotLists" :key="item.id">{{item.nm}}</li>
         </ul>
       </div>
-      <div class="city_sort">
+      <div class="city_sort" ref="city_sort">
         <div v-for="(item, ind) in cityLists" :key="ind">
           <h2>{{item.index}}</h2>
           <ul>
@@ -18,7 +18,7 @@
     </div>
     <div class="city_index">
       <ul>
-        <li v-for="(item, ind) in cityLists" :key="ind">{{item.index}}</li>
+        <li v-for="(item, ind) in cityLists" :key="ind" @click="scrollToCityList(ind)">{{item.index}}</li>
       </ul>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
         let msg = res.data.msg;
         if (msg === "ok") {
           cityLists = res.data.data.cities;
-          console.log(cityLists);
+          // console.log(cityLists);
           // 生成hotLists
           // cityLists 格式 [{index: 'A', lists: [{}, {}]}]
           cityLists.forEach((el, ind) => {
@@ -89,6 +89,11 @@ export default {
           }
         }
       });
+    },
+    scrollToCityList (ind) {
+      let scrollElement = this.$refs.city_sort
+      let currentElement = scrollElement.children[ind]
+      scrollElement.parentNode.scrollTop = currentElement.offsetTop
     }
   }
 };

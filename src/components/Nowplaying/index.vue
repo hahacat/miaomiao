@@ -7,6 +7,7 @@
         </div>
         <div class="info_list">
           <h2>{{item.nm}}</h2>
+          <img src="@/assets/img/maxs.png" v-show="item.version.includes('v3d')" />
           <p>
             观众评
             <span class="grade">{{item.sc}}</span>
@@ -23,25 +24,25 @@
 <script>
 export default {
   name: "nowplaying",
-  data () {
+  data() {
     return {
       movieList: []
-    }
+    };
   },
   methods: {
-    getMovieList () {
-      this.axios.get('/api/movieOnInfoList?cityId=10').then((res) => {
-        let msg = res.data.msg
-        if (msg === 'ok') {
-          console.log(res.data.data.movieList)
-          this.movieList = res.data.data.movieList
+    getMovieList() {
+      this.axios.get("/api/movieOnInfoList?cityId=10").then(res => {
+        let msg = res.data.msg;
+        if (msg === "ok") {
+          console.log(res.data.data.movieList);
+          this.movieList = res.data.data.movieList;
         }
-      })
-      console.log(this.movieList)
+      });
+      console.log(this.movieList);
     }
   },
-  created () {
-    this.getMovieList()
+  created() {
+    this.getMovieList();
   }
 };
 </script>

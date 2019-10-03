@@ -12,6 +12,10 @@ export default new Router({
       component: () => import('@/views/movie'),
       children: [
         {
+          path: '/movie',
+          redirect: '/movie/nowplaying'
+        },
+        {
           path: '/movie/city',
           name: 'city',
           component: () => import('@/components/City')
