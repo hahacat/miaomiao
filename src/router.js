@@ -29,6 +29,11 @@ export default new Router({
           path: '/movie/nowcoming',
           name: 'nowcoming',
           component: () => import('@/components/Nowcoming')
+        },
+        {
+          path: '/movie/search',
+          name: 'search',
+          component: () => import('@/components/Search')
         }
       ]
     },

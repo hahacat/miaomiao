@@ -1,24 +1,40 @@
 <template>
   <div class="city_body">
     <div class="city_list">
-      <div class="city_hot">
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li v-for="item in hotLists" :key="item.id">{{item.nm}}</li>
-        </ul>
-      </div>
-      <div class="city_sort" ref="city_sort">
-        <div v-for="(item, ind) in cityLists" :key="ind">
-          <h2>{{item.index}}</h2>
-          <ul>
-            <li v-for="city in item.list" :key="city.id">{{city.name}}</li>
-          </ul>
+      <Scroller ref="city_list">
+        <div>
+          <div class="city_hot">
+            <h2>热门城市</h2>
+            <ul class="clearfix">
+              <li
+                v-for="item in hotLists"
+                :key="item.id"
+                @tap="changeCityInfo(item.nm, item.id)"
+              >{{item.nm}}</li>
+            </ul>
+          </div>
+          <div class="city_sort" ref="city_sort">
+            <div v-for="(item, ind) in cityLists" :key="ind">
+              <h2>{{item.index}}</h2>
+              <ul>
+                <li
+                  v-for="city in item.list"
+                  :key="city.id"
+                  @tap="changeCityInfo(city.name, city.id)"
+                >{{city.name}}</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
+      </Scroller>
     </div>
     <div class="city_index">
       <ul>
-        <li v-for="(item, ind) in cityLists" :key="ind" @click="scrollToCityList(ind)">{{item.index}}</li>
+        <li
+          v-for="(item, ind) in cityLists"
+          :key="ind"
+          @touchstart="scrollToCityList(ind)"
+        >{{item.index}}</li>
       </ul>
     </div>
   </div>
@@ -59,9 +75,9 @@ export default {
               // 有
               this.cityLists.forEach((v, j) => {
                 if (v.index === firstLetter) {
-                  v.list.push({name: cityLists[i].nm, id: cityLists[i].id})
+                  v.list.push({ name: cityLists[i].nm, id: cityLists[i].id });
                 }
-              })
+              });
             } else {
               // 没有
               this.cityLists.push({
@@ -90,10 +106,15 @@ export default {
         }
       });
     },
-    scrollToCityList (ind) {
-      let scrollElement = this.$refs.city_sort
-      let currentElement = scrollElement.children[ind]
-      scrollElement.parentNode.scrollTop = currentElement.offsetTop
+    scrollToCityList(ind) {
+      let currentElement = this.$refs.city_sort.children[ind];
+      this.$refs.city_list.toScrollTop(-currentElement.offsetTop);
+    },
+    changeCityInfo(nm, id) {
+      this.$store.commit("city/changeCityInfo", { nm, id });
+      window.localStorage.setItem("id", id);
+      window.localStorage.setItem("nm", nm);
+      this.$router.push("/movie/nowplaying");
     }
   }
 };
@@ -127,8 +148,6 @@ export default {
   background: #f0f0f0;
   font-weight: normal;
 }
-.city_body .city_hot ul {
-}
 .city_body .city_hot ul li {
   float: left;
   background: #fff;
@@ -143,8 +162,7 @@ export default {
   text-align: center;
   box-sizing: border-box;
 }
-.city_body .city_sort {
-}
+
 .city_body .city_sort div {
   margin-top: 20px;
 }

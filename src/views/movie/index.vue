@@ -4,7 +4,7 @@
     <div id="content">
       <div class="movie_menu">
         <router-link tag="div" class="city_name" to="/movie/city">
-          <span>大连</span>
+          <span>{{$store.state.city.nm}}</span>
           <i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="hot_swtich">
@@ -15,7 +15,9 @@
           <i class="iconfont icon-sousuo"></i>
         </router-link>
       </div>
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <Footer />
   </div>

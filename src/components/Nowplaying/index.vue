@@ -1,50 +1,58 @@
 <template>
   <div class="movie_body">
-    <ul>
-      <li v-for="item in movieList" :key="item.id">
-        <div class="pic_show">
-          <img :src="item.img | setWH('128.180')" />
-        </div>
-        <div class="info_list">
-          <h2>{{item.nm}}</h2>
-          <img src="@/assets/img/maxs.png" v-show="item.version.includes('v3d')" />
-          <p>
-            观众评
-            <span class="grade">{{item.sc}}</span>
-          </p>
-          <p>主演: {{item.star}}</p>
-          <p>{{item.showInfo}}</p>
-        </div>
-        <div class="btn_mall">购票</div>
-      </li>
-    </ul>
+    <Scroller>
+      <ul>
+        <li v-for="item in movieList" :key="item.id">
+          <div class="pic_show">
+            <img :src="item.img | setWH('128.180')" />
+          </div>
+          <div class="info_list">
+            <h2>{{item.nm}}</h2>
+            <img src="@/assets/img/maxs.png" v-show="item.version.includes('v3d')" />
+            <p>
+              观众评
+              <span class="grade">{{item.sc}}</span>
+            </p>
+            <p>主演: {{item.star}}</p>
+            <p>{{item.showInfo}}</p>
+          </div>
+          <div class="btn_mall">购票</div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
 <script>
 export default {
-  name: "nowplaying",
-  data() {
+  name: 'nowplaying',
+  data () {
     return {
-      movieList: []
+      movieList: [],
+      prevId: -1
     };
   },
   methods: {
-    getMovieList() {
-      this.axios.get("/api/movieOnInfoList?cityId=10").then(res => {
-        let msg = res.data.msg;
-        if (msg === "ok") {
-          console.log(res.data.data.movieList);
-          this.movieList = res.data.data.movieList;
+    getMovieList () {
+      let cityId = this.$store.state.city.id
+      this.axios.get(`/api/movieOnInfoList?cityId=${cityId}`).then(res => {
+        let msg = res.data.msg
+        if (msg === 'ok') {
+          this.movieList = res.data.data.movieList
+          window.localStorage.setItem('movieList', JSON.stringify(this.movieList))
+          this.prevId = cityId
         }
       });
-      console.log(this.movieList);
     }
   },
-  created() {
-    this.getMovieList();
+  activated () {
+    let cityId = this.$store.state.city.id
+    if (cityId === this.prevId) {
+      return
+    }
+    this.getMovieList()
   }
-};
+}
 </script>
 
 <style scoped>

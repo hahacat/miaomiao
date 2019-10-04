@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import axios from 'axios'
+import Scroller from '@/components/Scroller'
 
 Vue.prototype.axios = axios
 
@@ -10,6 +11,8 @@ Vue.config.productionTip = false
 Vue.filter('setWH', function (src, str) {
   return src.replace(/w.h/, str)
 })
+
+Vue.component('Scroller', Scroller)
 
 new Vue({
   router,

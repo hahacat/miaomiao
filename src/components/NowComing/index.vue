@@ -1,22 +1,24 @@
 <template>
   <div class="movie_body">
-    <ul>
-      <li v-for="item in movieLists" :key="item.id">
-        <div class="pic_show">
-          <img :src="item.img | setWH('128.180')" />
-        </div>
-        <div class="info_list">
-          <h2>{{item.nm}}</h2>
-          <img src="@/assets/img/maxs.png" v-show="item.version.includes('v3d')" />
-          <p>
-            <span class="person">{{item.wish}}</span> 人想看
-          </p>
-          <p>主演：{{item.star}}</p>
-          <p>{{item.rt}}上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-    </ul>
+    <Scroller>
+      <ul>
+        <li v-for="item in movieLists" :key="item.id">
+          <div class="pic_show">
+            <img :src="item.img | setWH('128.180')" />
+          </div>
+          <div class="info_list">
+            <h2>{{item.nm}}</h2>
+            <img src="@/assets/img/maxs.png" v-show="item.version.includes('v3d')" />
+            <p>
+              <span class="person">{{item.wish}}</span> 人想看
+            </p>
+            <p>主演：{{item.star}}</p>
+            <p>{{item.rt}}上映</p>
+          </div>
+          <div class="btn_pre">预售</div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -25,25 +27,30 @@ export default {
   name: 'nowcoming',
   data () {
     return {
-      movieLists: []
+      movieLists: [],
+      prevId: -1
     }
   },
   // http://39.97.33.178/api/movieComingList?cityId=10
-  created () {
+  activated () {
+    let cityId = this.$store.state.city.id
+    if (cityId === this.prevId) {
+      return
+    }
     this.getMovieLists()
   },
   methods : {
     getMovieLists () {
+      let cityId = this.$store.state.city.id
       this.axios.get('/api/movieComingList',{
         params: {
-          cityId: 10
+          cityId
         }
       }).then((res) => {
         let data = res.data
         if (data.status === 0) {
           this.movieLists = data.data.comingList
         }
-        console.log(this.movieLists)
       })
     }
   }
