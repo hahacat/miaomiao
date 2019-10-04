@@ -24,37 +24,39 @@
 
 <script>
 export default {
-  name: 'nowcoming',
-  data () {
+  name: "nowcoming",
+  data() {
     return {
       movieLists: [],
       prevId: -1
-    }
+    };
   },
   // http://39.97.33.178/api/movieComingList?cityId=10
-  activated () {
-    let cityId = this.$store.state.city.id
+  activated() {
+    let cityId = this.$store.state.city.id;
     if (cityId === this.prevId) {
-      return
+      return;
     }
-    this.getMovieLists()
+    this.getMovieLists();
   },
-  methods : {
-    getMovieLists () {
-      let cityId = this.$store.state.city.id
-      this.axios.get('/api/movieComingList',{
-        params: {
-          cityId
-        }
-      }).then((res) => {
-        let data = res.data
-        if (data.status === 0) {
-          this.movieLists = data.data.comingList
-        }
-      })
+  methods: {
+    getMovieLists() {
+      let cityId = this.$store.state.city.id;
+      this.axios
+        .get("/api/movieComingList", {
+          params: {
+            cityId
+          }
+        })
+        .then(res => {
+          let data = res.data;
+          if (data.status === 0) {
+            this.movieLists = data.data.comingList;
+          }
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>

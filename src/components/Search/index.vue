@@ -48,17 +48,16 @@ export default {
     },
     getMovies() {
       let cityId = this.$store.state.city.id;
-      let keyWords = this.keyWords;
+      let kw = this.keyWords;
       this.axios
         .get("/api/searchList", {
           params: {
-            cityId: 10,
-            keyWords: 'a'
+            cityId,
+            kw
           }
         })
         .then(res => {
           let msg = res.data.msg;
-          console.log(res.data.data.movies.list);
           if (msg === "ok") {
             this.movieLists = res.data.data.movies.list;
           }
