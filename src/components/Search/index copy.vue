@@ -2,8 +2,8 @@
   <div class="search_body">
     <div class="search_input">
       <div class="search_input_wrapper">
-        <i class="iconfont icon-sousuo"></i>
-        <input type="text" v-model="keyWords" />
+        <i class="iconfont icon-sousuo" @touchstart="searchMovies"></i>
+        <input type="text" v-model="keyWords" @keyup.enter="searchMovies" />
       </div>
     </div>
     <Scroller>
@@ -42,41 +42,25 @@ export default {
   // http://39.97.33.178/api/searchList?cityId=10&kw=a
   created() {},
   methods: {
-    cancelRequest() {
-      if (typeof this.source === "function") {
-        this.source("终止请求!");
-      }
-    }
-  },
-  watch: {
-    keyWords(newValue) {
-      this.cancelRequest();
-      let that = this;
+    searchMovies() {
+      this.getMovies();
+    },
+    getMovies() {
       let cityId = this.$store.state.city.id;
-      let kw = newValue;
+      let kw = this.keyWords;
       this.axios
-        .get(`/api/searchList?cityId=${cityId}&kw=${kw}`, {
-          cancelToken: new this.axios.CancelToken(function executor(c) {
-            that.source = c;
-          })
+        .get("/api/searchList", {
+          params: {
+            cityId,
+            kw
+          }
         })
         .then(res => {
           let msg = res.data.msg;
           if (msg === "ok") {
             this.movieLists = res.data.data.movies.list;
           }
-        }).catch(err => {
-         if (err) {
-            if (this.axios.isCancel(err)) {
-               // 终止多次请求 请求取消 返回取消后的信息
-               console.log('请求取消', err.message)
-            } else {
-               // 服务端数据异常
-               console.log('没有搜索到数据哦')
-               this.movieLists = []
-            }
-         }
-      });
+        });
     }
   }
 };
