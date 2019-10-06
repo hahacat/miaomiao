@@ -12,28 +12,35 @@ export default new Router({
       component: () => import('@/views/movie'),
       children: [
         {
-          path: '/movie',
+          path: 'movie',
           redirect: '/movie/nowplaying'
         },
         {
-          path: '/movie/city',
+          path: 'city',
           name: 'city',
           component: () => import('@/components/City')
         },
         {
-          path: '/movie/nowplaying',
+          path: 'nowplaying',
           name: 'nowplaying',
           component: () => import('@/components/Nowplaying')
         },
         {
-          path: '/movie/nowcoming',
+          path: 'nowcoming',
           name: 'nowcoming',
           component: () => import('@/components/Nowcoming')
         },
         {
-          path: '/movie/search',
+          path: 'search',
           name: 'search',
           component: () => import('@/components/Search')
+        },
+        {
+          path: 'detail/:id',
+          components: {
+            detail: () => import('@/views/movie/detail')
+          },
+          props: true
         }
       ]
     },
@@ -49,7 +56,7 @@ export default new Router({
     },
     {
       path: '/*',
-      redirect: '/movie'
+      redirect: '/movie/nowplaying'
     }
   ]
 })

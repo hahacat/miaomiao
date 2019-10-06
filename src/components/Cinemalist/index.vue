@@ -1,6 +1,7 @@
 <template>
   <div class="cinema_body">
-    <Scroller>
+    <Loading v-if="ifLoadingShow" />
+    <Scroller v-else>
       <ul>
         <li v-for="item in cinemaLists" :key="item.id">
           <div>
@@ -15,7 +16,12 @@
             <span>{{item.distance}}</span>
           </div>
           <div class="card">
-            <div v-for="(ind, card) of item.tag" :key="card" v-if="ind === 1" :class="card | classFilter">{{card | cardFilter}}</div>
+            <div
+              v-for="(ind, card) of item.tag"
+              :key="card"
+              v-if="ind === 1"
+              :class="card | classFilter"
+            >{{card | cardFilter}}</div>
           </div>
         </li>
       </ul>
@@ -24,38 +30,40 @@
 </template>
 
 <script>
+import Loading from '@/components/Loading'
 export default {
   name: "cinemalist",
   data() {
     return {
       cinemaLists: [],
-      prevId: -1
+      prevId: -1,
+      ifLoadingShow: true
     };
   },
   filters: {
     cardFilter(value) {
       const obj = {
-        'sell': '折扣卡',
-        'snack': '小吃',
-        'allowRefund': '改',
-        'endorse': '退'
-      }
-      for(let key in obj) {
+        sell: "折扣卡",
+        snack: "小吃",
+        allowRefund: "改",
+        endorse: "退"
+      };
+      for (let key in obj) {
         if (value === key) {
-          return obj[key]
+          return obj[key];
         }
       }
     },
-    classFilter (value) {
+    classFilter(value) {
       const obj = {
-        'sell': 'or',
-        'snack': 'or',
-        'allowRefund': 'bl',
-        'endorse': 'bl'
-      }
-      for(let key in obj) {
+        sell: "or",
+        snack: "or",
+        allowRefund: "bl",
+        endorse: "bl"
+      };
+      for (let key in obj) {
         if (value === key) {
-          return obj[key]
+          return obj[key];
         }
       }
     }
@@ -76,10 +84,14 @@ export default {
         if (msg === "ok") {
           this.cinemaLists = res.data.data.cinemas;
           this.prevId = cityId;
+          this.ifLoadingShow = false
         }
       });
-  }
+  },
   // http://39.97.33.178/api/cinemaList?cityId=10
+  components: {
+    Loading
+  }
 };
 </script>
 

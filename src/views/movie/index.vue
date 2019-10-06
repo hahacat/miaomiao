@@ -16,10 +16,11 @@
         </router-link>
       </div>
       <keep-alive>
-        <router-view></router-view>
+        <router-view />
       </keep-alive>
     </div>
     <Footer />
+    <router-view name="detail" />
   </div>
 </template>
 

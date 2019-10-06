@@ -6,7 +6,8 @@
         <input type="text" v-model="keyWords" />
       </div>
     </div>
-    <Scroller>
+    <Loading v-if="ifLoadingShow" />
+    <Scroller v-else>
       <div class="search_result">
         <h3>电影/电视剧/综艺</h3>
         <ul>
@@ -31,12 +32,14 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading";
 export default {
   name: "Search",
   data() {
     return {
       keyWords: "",
-      movieLists: []
+      movieLists: [],
+      ifLoadingShow: false
     };
   },
   // http://39.97.33.178/api/searchList?cityId=10&kw=a
@@ -50,6 +53,7 @@ export default {
   },
   watch: {
     keyWords(newValue) {
+      this.ifLoadingShow = true;
       this.cancelRequest();
       let that = this;
       let cityId = this.$store.state.city.id;
@@ -64,6 +68,7 @@ export default {
           let msg = res.data.msg;
           if (msg === "ok") {
             this.movieLists = res.data.data.movies.list;
+            this.ifLoadingShow = false;
           }
         }).catch(err => {
          if (err) {
@@ -78,6 +83,9 @@ export default {
          }
       });
     }
+  },
+  components: {
+    Loading
   }
 };
 </script>

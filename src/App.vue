@@ -1,12 +1,13 @@
 <template>
-  <div id="app">
+  <keep-alive>
     <router-view />
-  </div>
+  </keep-alive>
 </template>
 
 <style>
-#app {
+#main {
   height: 100%;
+  position: relative;
 }
 #content {
   flex: 1;

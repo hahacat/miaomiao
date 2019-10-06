@@ -1,10 +1,11 @@
 <template>
   <div class="movie_body">
-    <Scroller>
+    <Loading v-if="ifLoadingShow" />
+    <Scroller v-else>
       <ul>
         <li v-for="item in movieList" :key="item.id">
           <div class="pic_show">
-            <img :src="item.img | setWH('128.180')" />
+            <img :src="item.img | setWH('128.180')" @tap="gotoDetail(item.id)"/>
           </div>
           <div class="info_list">
             <h2>{{item.nm}}</h2>
@@ -24,12 +25,14 @@
 </template>
 
 <script>
+import Loading from '@/components/Loading'
 export default {
   name: 'nowplaying',
   data () {
     return {
       movieList: [],
-      prevId: -1
+      prevId: -1,
+      ifLoadingShow: true
     };
   },
   methods: {
@@ -41,8 +44,12 @@ export default {
           this.movieList = res.data.data.movieList
           window.localStorage.setItem('movieList', JSON.stringify(this.movieList))
           this.prevId = cityId
+          this.ifLoadingShow = false
         }
       });
+    },
+    gotoDetail(id) {
+      this.$router.push({path: `detail/${id}`})
     }
   },
   activated () {
@@ -51,6 +58,9 @@ export default {
       return
     }
     this.getMovieList()
+  },
+  components: {
+    Loading
   }
 }
 </script>

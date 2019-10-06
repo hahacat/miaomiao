@@ -1,25 +1,26 @@
 <template>
   <div class="mine">
-    <Header title="我的"/>
-    <Loading />
+    <Header title="我的" />
+    <div id="content">
+      <Login />
+    </div>
     <Footer />
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import Loading from '@/components/Loading'
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Login from "@/components/Login";
 export default {
-  name: 'mine',
+  name: "mine",
   components: {
     Header,
     Footer,
-    Loading
+    Login
   }
 }
 </script>
 
 <style scoped>
-
 </style>>

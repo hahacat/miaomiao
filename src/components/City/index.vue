@@ -1,6 +1,7 @@
 <template>
   <div class="city_body">
-    <div class="city_list">
+    <Loading v-if="ifLoadingShow" />
+    <div class="city_list" v-else>
       <Scroller ref="city_list">
         <div>
           <div class="city_hot">
@@ -41,70 +42,87 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading";
 export default {
   name: "city",
   data() {
     return {
       hotLists: [],
-      cityLists: []
+      cityLists: [],
+      ifLoadingShow: true
     };
   },
   created() {
     this.getCityLists();
   },
   methods: {
-    getCityLists() {
-      let cityLists = [];
+    checkoutCityLists(cityLists) {
       let that = this;
-      this.axios.get("/api/cityList").then(res => {
-        let msg = res.data.msg;
-        if (msg === "ok") {
-          cityLists = res.data.data.cities;
-          // console.log(cityLists);
-          // 生成hotLists
-          // cityLists 格式 [{index: 'A', lists: [{}, {}]}]
-          cityLists.forEach((el, ind) => {
-            if (el.isHot === 1) {
-              this.hotLists.push(el);
-            }
-          });
-
-          for (var i = 0; i < cityLists.length; i++) {
-            let firstLetter = cityLists[i].py.substring(0, 1).toUpperCase();
-            if (formatCityList(firstLetter)) {
-              // 有
-              this.cityLists.forEach((v, j) => {
-                if (v.index === firstLetter) {
-                  v.list.push({ name: cityLists[i].nm, id: cityLists[i].id });
-                }
-              });
-            } else {
-              // 没有
-              this.cityLists.push({
-                index: firstLetter,
-                list: [{ name: cityLists[i].nm, id: cityLists[i].id }]
-              });
-            }
-          }
-
-          this.cityLists.sort((a, b) => {
-            if (a.index > b.index) {
-              return 1;
-            } else {
-              return -1;
-            }
-          });
-
-          function formatCityList(firstLetter) {
-            for (let i = 0; i < that.cityLists.length; i++) {
-              if (firstLetter === that.cityLists[i].index) {
-                return true;
-              }
-            }
-            return false;
-          }
+      cityLists.forEach((el, ind) => {
+        if (el.isHot === 1) {
+          this.hotLists.push(el);
         }
       });
+      for (var i = 0; i < cityLists.length; i++) {
+        let firstLetter = cityLists[i].py.substring(0, 1).toUpperCase();
+        if (formatCityList(firstLetter)) {
+          // 有
+          this.cityLists.forEach((v, j) => {
+            if (v.index === firstLetter) {
+              v.list.push({ name: cityLists[i].nm, id: cityLists[i].id });
+            }
+          });
+        } else {
+          // 没有
+          this.cityLists.push({
+            index: firstLetter,
+            list: [{ name: cityLists[i].nm, id: cityLists[i].id }]
+          });
+        }
+      }
+
+      this.cityLists.sort((a, b) => {
+        if (a.index > b.index) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      function formatCityList(firstLetter) {
+        for (let i = 0; i < that.cityLists.length; i++) {
+          if (firstLetter === that.cityLists[i].index) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      window.localStorage.setItem("hotLists", JSON.stringify(this.hotLists));
+      window.localStorage.setItem("cityLists", JSON.stringify(this.cityLists));
+    },
+    getCityLists() {
+      let cityLists = window.localStorage.getItem('cityLists')
+      let hotLists = window.localStorage.getItem('hotLists')
+      
+      if (cityLists && hotLists) {
+        this.cityLists = JSON.parse(cityLists)
+        this.hotLists = JSON.parse(hotLists)
+        this.ifLoadingShow = false;
+      } else {
+        cityLists = [];
+        this.axios.get("/api/cityList").then(res => {
+          let msg = res.data.msg;
+          if (msg === "ok") {
+            cityLists = res.data.data.cities;
+            this.ifLoadingShow = false;
+            // console.log(cityLists);
+            // 生成hotLists
+            // cityLists 格式 [{index: 'A', lists: [{}, {}]}]
+            this.checkoutCityLists(cityLists);
+          }
+        });  
+      }
     },
     scrollToCityList(ind) {
       let currentElement = this.$refs.city_sort.children[ind];
@@ -112,10 +130,11 @@ export default {
     },
     changeCityInfo(nm, id) {
       this.$store.commit("city/changeCityInfo", { nm, id });
-      window.localStorage.setItem("id", id);
-      window.localStorage.setItem("nm", nm);
       this.$router.push("/movie/nowplaying");
     }
+  },
+  components: {
+    Loading
   }
 };
 </script>
