@@ -38,9 +38,10 @@ export default new Router({
         {
           path: 'detail/:id',
           components: {
+            default: () => import('@/components/Nowcoming'),
             detail: () => import('@/views/movie/detail')
           },
-          props: true
+          props: { default: false, detail: true }
         }
       ]
     },

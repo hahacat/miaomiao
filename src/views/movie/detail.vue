@@ -6,68 +6,34 @@
     <Loading v-if="ifLoadingShow" />
     <div id="content" class="contentDetail" v-else>
       <div class="detail_list">
-        <div class="detail_list_bg"></div>
+        <div
+          class="detail_list_bg"
+          v-bind:style="{ backgroundImage : `url( ${movieDetail.albumImg})` }"
+        ></div>
         <div class="detail_list_filter"></div>
         <div class="detail_list_content">
           <div class="detail_list_img">
-            <img src="../../assets/img/movie_1.jpg" alt />
+            <img :src="movieDetail.img | setWH('148.208')" alt="">
           </div>
           <div class="detail_list_info">
-            <h2>无名之辈</h2>
-            <p>A Cool Fish</p>
-            <p>9.2</p>
-            <p>剧情,喜剧,犯罪</p>
-            <p>中国大陆 / 108分钟</p>
-            <p>2018-11-16大陆上映</p>
+            <h2>{{movieDetail.nm}}</h2>
+            <p>{{movieDetail.enm}}</p>
+            <p>{{movieDetail.sc}}</p>
+            <p>{{movieDetail.cat}}</p>
+            <p>{{ movieDetail.src }} / {{ movieDetail.dur }}分钟</p>
+            <p>{{ movieDetail.pubDesc }}</p>
           </div>
         </div>
       </div>
       <div class="detail_intro">
-        <p>在一座山间小城中，一对低配劫匪、一个落魄的泼皮保安、一个身体残疾却性格彪悍的残毒舌女以及一系列生活在社会不同轨迹上的小人物，在一个貌似平常的日子里，因为一把丢失的老枪和一桩当天发生在城中的乌龙劫案，从而被阴差阳错地拧到一起，发生的一幕幕令人啼笑皆非的荒诞喜剧。</p>
+        <p>{{ movieDetail.dra }}</p>
       </div>
       <div class="detail_player">
         <swiper class="ul" ref="detail_player" :options="swiperOption">
-          <swiper-slide class="swiper-slide li">
+          <swiper-slide class="swiper-slide li" v-for="(item,index) in movieDetail.photos" :key="index">
             <div>
-              <img src="@/assets/img/person_1.webp" alt />
+              <img :src="item | setWH('140.127')" alt="">
             </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
-          </swiper-slide>
-          <swiper-slide class="li">
-            <div>
-              <img src="@/assets/img/person_1.webp" alt />
-            </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
-          </swiper-slide>
-          <swiper-slide class="li">
-            <div>
-              <img src="@/assets/img/person_1.webp" alt />
-            </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
-          </swiper-slide>
-          <swiper-slide class="li">
-            <div>
-              <img src="@/assets/img/person_1.webp" alt />
-            </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
-          </swiper-slide>
-          <swiper-slide class="li">
-            <div>
-              <img src="@/assets/img/person_1.webp" alt />
-            </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
-          </swiper-slide>
-          <swiper-slide class="li">
-            <div>
-              <img src="@/assets/img/person_1.webp" alt />
-            </div>
-            <p>陈建斌</p>
-            <p>马先勇</p>
           </swiper-slide>
         </swiper>
       </div>
@@ -79,19 +45,20 @@
 import Header from "@/components/Header";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
-import Loading from '@/components/Loading'
-// http://39.97.33.178/api/detailmovie?movieId=345808
+import Loading from "@/components/Loading";
 export default {
   name: "detail",
-  props: ['id'],
+  props: ["id"],
   data() {
     return {
-      ifLoadingShow: false,
+      movieDetail: {},
+      ifLoadingShow: true,
       swiperOption: {
         spaceBetween: 20,
         slidesPerView: "auto",
         freeMode: true,
-        freeModeSticky: true
+        freeModeSticky: true,
+        prevId: -1
       }
     };
   },
@@ -107,14 +74,30 @@ export default {
     Loading
   },
   created() {
-    this.getMovieDetail()
+    this.getMovieDetail();
   },
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
-    getMovieDetail () {
-      console.log(this.id)
+    getMovieDetail() {
+      // http://39.97.33.178/api/detailmovie?movieId=345808
+      if (this.prevId === this.id) {
+        // 同一个电影
+        this.movieDetail = window.localStorage.getItem('movieDetail')
+        this.ifLoadingShow = false
+      } else {
+        // 不同的电影
+        this.axios.get(`/api/detailmovie?movieId=${this.id}`).then(res => {
+          let msg = res.data.msg;
+          if (msg === "ok") {
+            this.movieDetail = res.data.data.detailMovie;
+            this.ifLoadingShow = false
+            window.localStorage.setItem('movieDetail', this.movieDetail)
+            this.prevId = this.id
+          }
+        });
+      }
     }
   }
 };
@@ -144,7 +127,7 @@ export default {
 .detail_list .detail_list_bg {
   width: 100%;
   height: 100%;
-  background: url(../../assets/img/movie_1.jpg) 0 40%;
+  /* background: url(../../assets/img/movie_1.jpg) 0 40%; */
   filter: blur(20px);
   background-size: cover;
   position: absolute;
