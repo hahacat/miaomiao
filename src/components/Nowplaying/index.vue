@@ -49,7 +49,7 @@ export default {
       });
     },
     gotoDetail(id) {
-      this.$router.push({path: `detail/${id}`})
+      this.$router.push({ path: `detail/nowplaying/${id}` })
     }
   },
   activated () {

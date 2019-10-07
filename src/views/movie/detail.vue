@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-container">
+  <div id="detail-container" class="slide">
     <Header title="影片详情">
       <i class="iconfont icon-right" @touchstart="goBack"></i>
     </Header>
@@ -13,7 +13,7 @@
         <div class="detail_list_filter"></div>
         <div class="detail_list_content">
           <div class="detail_list_img">
-            <img :src="movieDetail.img | setWH('148.208')" alt="">
+            <img :src="movieDetail.img | setWH('148.208')" alt />
           </div>
           <div class="detail_list_info">
             <h2>{{movieDetail.nm}}</h2>
@@ -30,9 +30,13 @@
       </div>
       <div class="detail_player">
         <swiper class="ul" ref="detail_player" :options="swiperOption">
-          <swiper-slide class="swiper-slide li" v-for="(item,index) in movieDetail.photos" :key="index">
+          <swiper-slide
+            class="swiper-slide li"
+            v-for="(item,index) in movieDetail.photos"
+            :key="index"
+          >
             <div>
-              <img :src="item | setWH('140.127')" alt="">
+              <img :src="item | setWH('140.127')" alt />
             </div>
           </swiper-slide>
         </swiper>
@@ -84,17 +88,17 @@ export default {
       // http://39.97.33.178/api/detailmovie?movieId=345808
       if (this.prevId === this.id) {
         // 同一个电影
-        this.movieDetail = window.localStorage.getItem('movieDetail')
-        this.ifLoadingShow = false
+        this.movieDetail = window.localStorage.getItem("movieDetail");
+        this.ifLoadingShow = false;
       } else {
         // 不同的电影
         this.axios.get(`/api/detailmovie?movieId=${this.id}`).then(res => {
           let msg = res.data.msg;
           if (msg === "ok") {
             this.movieDetail = res.data.data.detailMovie;
-            this.ifLoadingShow = false
-            window.localStorage.setItem('movieDetail', this.movieDetail)
-            this.prevId = this.id
+            this.ifLoadingShow = false;
+            window.localStorage.setItem("movieDetail", this.movieDetail);
+            this.prevId = this.id;
           }
         });
       }
@@ -114,6 +118,17 @@ export default {
   background: #fff;
 }
 
+@keyframes slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.slide {
+  animation: slide .5s ease;
+}
 #content.contentDetail {
   display: block;
   margin-bottom: 0;
@@ -128,7 +143,8 @@ export default {
   width: 100%;
   height: 100%;
   /* background: url(../../assets/img/movie_1.jpg) 0 40%; */
-  filter: blur(20px);
+  background-position: 0 40%;
+  /* filter: blur(20px); */
   background-size: cover;
   position: absolute;
   left: 0;

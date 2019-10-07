@@ -12,7 +12,7 @@ export default new Router({
       component: () => import('@/views/movie'),
       children: [
         {
-          path: 'movie',
+          path: '/',
           redirect: '/movie/nowplaying'
         },
         {
@@ -36,9 +36,17 @@ export default new Router({
           component: () => import('@/components/Search')
         },
         {
-          path: 'detail/:id',
+          path: 'detail/nowcoming/:id',
           components: {
             default: () => import('@/components/Nowcoming'),
+            detail: () => import('@/views/movie/detail')
+          },
+          props: { default: false, detail: true }
+        },
+        {
+          path: 'detail/nowplaying/:id',
+          components: {
+            default: () => import('@/components/Nowplaying'),
             detail: () => import('@/views/movie/detail')
           },
           props: { default: false, detail: true }
