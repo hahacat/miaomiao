@@ -27,11 +27,23 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { MessageBox } from "@/components/Messagebox/index.js";
 export default {
   name: "movie",
   components: {
     Header,
     Footer
+  },
+  created() {
+    this.axios.get("/api/getLocation").then(res => {
+      if (res.data.msg === "ok") {
+        let data = res.data.data;
+        console.log(data);
+        MessageBox({
+          title: data.nm
+        });
+      }
+    });
   }
 };
 </script>
