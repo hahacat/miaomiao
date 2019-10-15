@@ -102,12 +102,12 @@ export default {
       window.localStorage.setItem("cityLists", JSON.stringify(this.cityLists));
     },
     getCityLists() {
-      let cityLists = window.localStorage.getItem('cityLists')
-      let hotLists = window.localStorage.getItem('hotLists')
-      
+      let cityLists = window.localStorage.getItem("cityLists");
+      let hotLists = window.localStorage.getItem("hotLists");
+
       if (cityLists && hotLists) {
-        this.cityLists = JSON.parse(cityLists)
-        this.hotLists = JSON.parse(hotLists)
+        this.cityLists = JSON.parse(cityLists);
+        this.hotLists = JSON.parse(hotLists);
         this.ifLoadingShow = false;
       } else {
         cityLists = [];
@@ -121,7 +121,7 @@ export default {
             // cityLists 格式 [{index: 'A', lists: [{}, {}]}]
             this.checkoutCityLists(cityLists);
           }
-        });  
+        });
       }
     },
     scrollToCityList(ind) {
@@ -130,7 +130,8 @@ export default {
     },
     changeCityInfo(nm, id) {
       this.$store.commit("city/changeCityInfo", { nm, id });
-      this.$router.push("/movie/nowplaying");
+      let from = this.$store.state.city.from;
+      this.$router.push(`/movie/${from}`);
     }
   },
   components: {

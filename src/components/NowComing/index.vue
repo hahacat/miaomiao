@@ -60,7 +60,7 @@ export default {
         });
     },
     goToDetail(id) {
-      this.$router.push({path: `detail/nowcoming/${id}`})
+      this.$router.push({ path: `detail/nowcoming/${id}` });
     }
   },
   components: {

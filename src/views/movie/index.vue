@@ -35,13 +35,29 @@ export default {
     Footer
   },
   created() {
+    let that = this;
     this.axios.get("/api/getLocation").then(res => {
       if (res.data.msg === "ok") {
         let data = res.data.data;
-        console.log(data);
-        MessageBox({
-          title: data.nm
-        });
+        if (data.nm !== this.$store.state.city.nm) {
+          MessageBox({
+            title: "位置信息",
+            content: `定位城市${data.nm}与所选城市不一致，是否切换到定位城市`,
+            ok: "确定",
+            cancel: "取消",
+            nm: data.nm,
+            id: data.id,
+            bindOk() {
+              window.localStorage.setItem("nm", data.nm);
+              window.localStorage.setItem("id", data.id);
+              that.$store.commit("city/changeCityInfo", {
+                nm: data.nm,
+                id: data.id
+              });
+              that.$router.go(0);
+            }
+          });
+        }
       }
     });
   }

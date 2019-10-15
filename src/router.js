@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from './store/index'
 
 Vue.use(Router)
 
@@ -18,7 +19,11 @@ export default new Router({
         {
           path: 'city',
           name: 'city',
-          component: () => import('@/components/City')
+          component: () => import('@/components/City'),
+          beforeEnter: (to, from, next) => {
+            Store.commit('city/changFrom', { from: from.name })
+            next()
+          }
         },
         {
           path: 'nowplaying',

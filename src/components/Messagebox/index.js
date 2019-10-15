@@ -5,10 +5,10 @@ export let MessageBox = (function () {
   // let options = {}
   return function (options) {
     let opt = options || {
-      title: '位置信息',
-      content: '定位城市与所选城市不一致，是否切换到定位城市',
-      ok: '确定',
-      cancel: '取消',
+      title: '',
+      content: '',
+      ok: '',
+      cancel: '',
       bindCancel: null,
       bindOk: null
     }
@@ -16,17 +16,18 @@ export let MessageBox = (function () {
     let Vm = Vue.extend(Message)
     let vm = new Vm({
       el: document.createElement('div'),
-      data () {
+      data() {
         return {
           opt
         }
       },
       methods: {
-        bindOk () {
-          console.log('b')
+        bindOk() {
+          this.opt.bindOk()
+          document.body.removeChild(vm.$el);
         },
         bindCancel() {
-          console.log('a')
+          document.body.removeChild(vm.$el);
         }
       },
       comments: {
@@ -34,6 +35,6 @@ export let MessageBox = (function () {
       }
     })
 
-    document.body.appendChild( vm.$el );
+    document.body.appendChild(vm.$el);
   }
 })()

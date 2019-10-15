@@ -2,10 +2,10 @@
   <div class="message-box">
     <div class="message">
       <h2 class="title">{{opt.title}}</h2>
-      <div class="content">{{content}}</div>
+      <div class="content">{{opt.content}}</div>
       <div class="btn-box">
-        <span class="ok" @touchstart="bindOk">{{ok}}</span>
-        <span class="cancel" @touchstart="bindCancel">{{cancel}}</span>
+        <span class="ok" @touchstart="bindOk">{{opt.ok}}</span>
+        <span class="cancel" @touchstart="bindCancel">{{opt.cancel}}</span>
       </div>
     </div>
   </div>
@@ -39,11 +39,13 @@ export default {
   text-align: center;
   font-size: 20px;
   line-height: 40px;
-  border-bottom: 1px solid #aaa;
 }
 .content {
   padding: 10px 10px;
   font: 16px/24px 'microsoft yahei';
+  border: 1px solid #aaa;
+  border-left: none;
+  border-right: none;
 }
 .btn-box {
   display: flex;
